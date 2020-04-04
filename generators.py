@@ -55,7 +55,8 @@ class Generator:
                 random.seed(seed)
                 seed += self.seed_different
                 edges.append(Edge(current_vertex, vertex,
-                                  random.randint(MIN_EDGE_COST, MAX_EDGE_COST)))
+                                  random.randint(MIN_EDGE_COST, MAX_EDGE_COST)
+                                  ))
                 if not count_edges:
                     break
             current_vertex += 1

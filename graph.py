@@ -41,10 +41,11 @@ class Graph:
         distances = [INF for _ in range(len(self.adjacency_list))]
         distances[self.start] = 0
 
-        for a in range(len(self.adjacency_list)):
+        for _ in range(len(self.adjacency_list)):
             check = True
             for edge in self.edge_list:
-                if distances[edge.s] < INF and distances[edge.s] + edge.dist < distances[edge.f]:
+                if distances[edge.s] < INF and distances[edge.s] + edge.dist\
+                        < distances[edge.f]:
                     distances[edge.f] = distances[edge.s] + edge.dist
                     check = False
             if check:

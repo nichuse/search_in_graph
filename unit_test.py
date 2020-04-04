@@ -27,7 +27,8 @@ class Tests(unittest.TestCase):
         self._check(1, [Edge(i, (i + 1) % 3, 2 ** i) for i in range(3)], 3,
                     [6, 0, 2])
         self._check(9, [Edge(i, (i + 1) % 10, 2 ** i) for i in range(10)], 10,
-                    [512 + sum(2 ** j for j in range(i)) for i in range(9)] + [0])
+                    [512 + sum(2 ** j for j in range(i)) for i in range(9)] +
+                    [0])
 
     def test_random_graph(self):
         gen = Generator(3, 5, seed_different=1)
@@ -36,7 +37,8 @@ class Tests(unittest.TestCase):
     def test_complete_graph(self):
         for count_vertex in range(1, 20):
             gen = Generator(count_vertex,
-                            count_vertex * (count_vertex + 1) // 2, START_SEED)
+                            count_vertex * (count_vertex + 1) // 2,
+                            START_SEED)
             answer = [0]
             for _ in range(count_vertex - 1):
                 random.seed(START_SEED)
