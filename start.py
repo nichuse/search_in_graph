@@ -1,6 +1,5 @@
 from graph import Graph, edge_list_to_adjacency_list
 from generators import Generator
-import random
 import time
 
 
@@ -28,9 +27,6 @@ def start_algorithm(number_of_vertex, graph, text):
 
 
 if __name__ == '__main__':
-    for i in Generator(3, 5, seed_different=1).generate_random_graph():
-        print(i)
-
     count_vertex = 100
     start_algorithm(count_vertex, Generator(
         count_vertex, count_vertex).generate_worst_for_levit(),
