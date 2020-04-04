@@ -28,6 +28,9 @@ def start_algorithm(number_of_vertex, graph, text):
 
 
 if __name__ == '__main__':
+    for i in Generator(3, 5, seed_different=1).generate_random_graph():
+        print(i)
+
     count_vertex = 100
     start_algorithm(count_vertex, Generator(
         count_vertex, count_vertex).generate_worst_for_levit(),
@@ -38,16 +41,16 @@ if __name__ == '__main__':
         count_vertex, count_vertex).generate_complete_graph(),
                     'Random complete graph')
 
-    count_vertex = 10000
-    count_edges = 500000
+    count_vertex = 1000
+    count_edges = 10000
     start_algorithm(count_vertex, Generator(
         count_vertex, count_edges, seed_different=1).generate_random_graph(),
                     'Random graph')
 
     start_algorithm(count_vertex, Generator(
-        count_vertex, count_edges).generate_bamboo(),
-                    'Bamboo')
+        count_vertex, count_edges).generate_best_for_ford_bellman(),
+                    'Best for Ford Bellman')
 
     start_algorithm(count_vertex, Generator(
-        count_vertex, count_edges, 10).generate_best_for_ford_bellman(),
-                    'Best for Ford Bellman')
+        count_vertex, count_edges).generate_worst_for_ford_bellman(),
+                    'Worst for Ford Bellman')

@@ -32,15 +32,6 @@ class Generator:
 
         return edges
 
-    def generate_bamboo(self):
-        random.seed(self.seed)
-        cost = random.randint(MIN_EDGE_COST, MAX_EDGE_COST)
-        edges = []
-        for i in range(self.count_vertex - 1):
-            edges.append(Edge(i, i + 1, cost))
-
-        return edges[::-1]
-
     def generate_complete_graph(self):
         edges = []
         seed = self.seed
@@ -70,6 +61,35 @@ class Generator:
             current_vertex += 1
 
         return edges
+
+    def generate_worst_for_ford_bellman(self):
+        edges = []
+        count_edges = self.count_edges
+        seed = self.seed
+        for v in range(self.count_vertex - 1):
+            random.seed(seed)
+            edges.append(Edge(v, v + 1, random.randint(
+                MIN_EDGE_COST, MAX_EDGE_COST)))
+            seed += self.seed_different
+            count_edges -= 1
+            if count_edges == 0:
+                return edges
+
+        current_vertex = self.count_vertex - 1
+        while count_edges:
+            for vertex in range(current_vertex, 0, -1):
+                count_edges -= 1
+                random.seed(seed)
+                edges.append(Edge(current_vertex, vertex,
+                                  random.randint(MIN_EDGE_COST, MAX_EDGE_COST
+                                                 )))
+                seed += self.seed_different
+
+                if not count_edges:
+                    break
+            current_vertex -= 1
+
+        return edges[::-1]
 
     def generate_worst_for_levit(self):
         edges = []

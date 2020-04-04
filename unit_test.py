@@ -29,14 +29,9 @@ class Tests(unittest.TestCase):
         self._check(9, [Edge(i, (i + 1) % 10, 2 ** i) for i in range(10)], 10,
                     [512 + sum(2 ** j for j in range(i)) for i in range(9)] + [0])
 
-    def test_bamboo(self):
-        count_vertex = 1000
-        gen = Generator(count_vertex, count_vertex, START_SEED)
-        bamboo = gen.generate_bamboo()
-        random.seed(START_SEED)
-        cost = random.randint(MIN_EDGE_COST, MAX_EDGE_COST)
-        self._check(0, bamboo, count_vertex,
-                    [i * cost for i in range(count_vertex)])
+    def test_random_graph(self):
+        gen = Generator(3, 5, seed_different=1)
+        self._check(0, gen.generate_random_graph(), 3, [0, 913, 44])
 
     def test_complete_graph(self):
         for count_vertex in range(1, 20):
@@ -59,6 +54,15 @@ class Tests(unittest.TestCase):
                 answer.append(random.randint(MIN_EDGE_COST, MAX_EDGE_COST))
             self._check(0, gen.generate_best_for_ford_bellman(), count_vertex,
                         answer)
+
+    def test_worst_for_ford_bellman(self):
+        count_vertex = 1000
+        gen = Generator(count_vertex, count_vertex, START_SEED)
+        bamboo = gen.generate_worst_for_ford_bellman()
+        random.seed(START_SEED)
+        cost = random.randint(MIN_EDGE_COST, MAX_EDGE_COST)
+        self._check(0, bamboo, count_vertex,
+                    [i * cost for i in range(count_vertex)])
 
     def test_worst_for_levit(self):
         for count_vertex in range(1, 20):
