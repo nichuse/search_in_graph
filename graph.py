@@ -1,88 +1,46 @@
-from collections import deque
-import heapq
-INF = 10 ** 10
-
-
 class Edge:
-    def __init__(self, s, f, dist):
+    def __init__(self, s, f, weight):
         self.s = s
         self.f = f
-        self.dist = dist
+        self.weight = weight
+
+    def get_weight(self):
+        return self.weight
 
     def __str__(self):
-        return f'{self.s} {self.f} {self.dist}'
+        return f'{self.s} {self.f} {self.weight}'
 
 
 class Graph:
-    def __init__(self, start, edge_list, adjacency_list):
-        self.start = start
-        self.adjacency_list = adjacency_list
-        self.edge_list = edge_list
+    def __init__(self):
+        self.adjacency_list = []
+        self.edge_list = []
 
-    def dijkstra(self):
-        distances = [INF for _ in range(len(self.adjacency_list))]
-        distances[self.start] = 0
-        q = []
-        heapq.heappush(q, (0, self.start))
+    def read_graph(self, filename):
+        with open(filename, 'r') as g:
+            for line in g.readlines():
+                s, f, w = list(map(int, line.split()))
+                self.add_edge(s, f, w)
 
-        while q:
-            dist, v = heapq.heappop(q)
-            if dist > distances[v]:
-                continue
-
-            for u, len_edge in self.adjacency_list[v]:
-                if distances[v] + len_edge < distances[u]:
-                    distances[u] = distances[v] + len_edge
-                    heapq.heappush(q, (distances[u], u))
-
-        return distances
-
-    def ford_bellman(self):
-        distances = [INF for _ in range(len(self.adjacency_list))]
-        distances[self.start] = 0
-
-        for _ in range(len(self.adjacency_list)):
-            check = True
+    def write_graph(self, filename):
+        with open(filename, 'w') as g:
             for edge in self.edge_list:
-                if distances[edge.s] < INF and distances[edge.s] + edge.dist\
-                        < distances[edge.f]:
-                    distances[edge.f] = distances[edge.s] + edge.dist
-                    check = False
-            if check:
-                break
+                g.writelines(str(edge) + '\n')
 
-        return distances
+    def add_edge(self, s, f, weight=1):
+        while self.count_vertex() <= s:
+            self.adjacency_list.append([])
+        self.edge_list.append(Edge(s, f, weight))
+        self.adjacency_list[s].append([f, weight])
 
-    def levit(self):
-        distances = [INF for _ in range(len(self.adjacency_list))]
-        distances[self.start] = 0
-        q1 = deque()
-        q2 = deque()
-        q1.append(self.start)
-        unused = set()
-        used = set()
-        for v in range(len(self.adjacency_list)):
-            if v != self.start:
-                unused.add(v)
-        while q1 or q2:
-            if q2:
-                u = q2.popleft()
-            else:
-                u = q1.popleft()
-            for v, dist in self.adjacency_list[u]:
-                if v in unused:
-                    q1.append(v)
-                    unused.remove(v)
-                    distances[v] = min(distances[v], distances[u] + dist)
-                elif v in used and distances[v] > distances[u] + dist:
-                    q2.append(v)
-                    used.remove(v)
-                    distances[v] = distances[u] + dist
-                else:
-                    distances[v] = min(distances[v], distances[u] + dist)
+    def adjacent_vertex(self, v):
+        return self.adjacency_list[v]
 
-            used.add(u)
-        return distances
+    def count_vertex(self):
+        return len(self.adjacency_list)
+
+    def count_edges(self):
+        return len(self.edge_list)
 
 
 def edge_list_to_adjacency_list(edge_list, count_vertex):
