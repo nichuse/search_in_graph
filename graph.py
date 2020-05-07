@@ -16,13 +16,13 @@ class Graph:
         self.adjacency_list = []
         self.edge_list = []
 
-    def read_graph(self, filename):
+    def read(self, filename):
         with open(filename, 'r') as g:
             for line in g.readlines():
                 s, f, w = list(map(int, line.split()))
                 self.add_edge(s, f, w)
 
-    def write_graph(self, filename):
+    def save(self, filename):
         with open(filename, 'w') as g:
             for edge in self.edge_list:
                 g.writelines(str(edge) + '\n')
