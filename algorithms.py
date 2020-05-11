@@ -1,53 +1,49 @@
 from collections import deque
-from graph import Graph
 import heapq
 
 INF = 10 ** 10
 
 
 class PathFinder:
-    def __init__(self, graph, *args):
+    def __init__(self, graph, start, *args):
         self.graph = graph
-        if len(args) > 0:
-            self.start = args[0]
-        if len(args) > 1:
-            self.finish = args[1]
+        self.start = start
+        if len(args) == 1:
+            self.finish = args[0]
         else:
             self.finish = -1
 
-    def get_path(self, distances):
+    def get_path(self):
         if self.finish == -1:
-            return distances
+            return self.pathfinder()
         else:
-            return distances[self.finish]
+            return self.pathfinder()[self.finish]
 
     def applicability_of_these_graph(self):
-        distances = [INF for _ in range(len(self.graph.adjacency_list))]
-        distances[self.graph.start] = 0
+        distances = [INF for _ in range(self.graph.max_vertex() + 1)]
+        distances[self.start] = 0
         check = True
         for _ in range(len(self.graph.adjacency_list) + 1):
             check = True
             for edge in self.graph.edge_list:
-                if distances[edge.s] < INF and distances[edge.s] + edge.dist \
+                if distances[edge.s] < INF and distances[edge.s] + edge.weight \
                         < distances[edge.f]:
-                    distances[edge.f] = distances[edge.s] + edge.dist
+                    distances[edge.f] = distances[edge.s] + edge.weight
                     check = False
         if not check:
-            print('Данный алгоритм неприменим к заданному графу')
             return False
-        print('Данный алгоритм применим к заданному графу')
         return True
 
     def pathfinder(self):
-        pass
+        return []
 
 
 class Dijkstra(PathFinder):
     def pathfinder(self):
-        distances = [INF for _ in range(len(self.graph.adjacency_list))]
-        distances[self.graph.start] = 0
+        distances = [INF for _ in range(self.graph.max_vertex() + 1)]
+        distances[self.start] = 0
         q = []
-        heapq.heappush(q, (0, self.graph.start))
+        heapq.heappush(q, (0, self.start))
 
         while q:
             dist, v = heapq.heappop(q)
@@ -64,23 +60,21 @@ class Dijkstra(PathFinder):
     def applicability_of_these_graph(self):
         for edge in self.graph.edge_list:
             if edge.weight < 0:
-                print('Данный алгоритм неприменим к заданному графу')
                 return False
-        print('Данный алгоритм применим к заданному графу')
         return True
 
 
 class FordBellman(PathFinder):
     def pathfinder(self):
-        distances = [INF for _ in range(len(self.graph.adjacency_list))]
-        distances[self.graph.start] = 0
+        distances = [INF for _ in range(self.graph.max_vertex() + 1)]
+        distances[self.start] = 0
 
         for _ in range(len(self.graph.adjacency_list)):
             check = True
             for edge in self.graph.edge_list:
-                if distances[edge.s] < INF and distances[edge.s] + edge.dist \
+                if distances[edge.s] < INF and distances[edge.s] + edge.weight \
                         < distances[edge.f]:
-                    distances[edge.f] = distances[edge.s] + edge.dist
+                    distances[edge.f] = distances[edge.s] + edge.weight
                     check = False
             if check:
                 break
@@ -89,15 +83,15 @@ class FordBellman(PathFinder):
 
 class Levit(PathFinder):
     def pathfinder(self):
-        distances = [INF for _ in range(len(self.graph.adjacency_list))]
-        distances[self.graph.start] = 0
+        distances = [INF for _ in range(self.graph.max_vertex() + 1)]
+        distances[self.start] = 0
         q1 = deque()
         q2 = deque()
-        q1.append(self.graph.start)
+        q1.append(self.start)
         unused = set()
         used = set()
         for v in range(len(self.graph.adjacency_list)):
-            if v != self.graph.start:
+            if v != self.start:
                 unused.add(v)
         while q1 or q2:
             if q2:

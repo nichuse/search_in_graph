@@ -28,7 +28,7 @@ class Graph:
                 g.writelines(str(edge) + '\n')
 
     def add_edge(self, s, f, weight=1):
-        while self.count_vertex() <= s:
+        while len(self.adjacency_list) <= max(s, f):
             self.adjacency_list.append([])
         self.edge_list.append(Edge(s, f, weight))
         self.adjacency_list[s].append([f, weight])
@@ -36,8 +36,15 @@ class Graph:
     def adjacent_vertex(self, v):
         return self.adjacency_list[v]
 
+    def max_vertex(self):
+        return max(max(edge.s, edge.f) for edge in self.edge_list)
+
     def count_vertex(self):
-        return len(self.adjacency_list)
+        vertexes = set()
+        for edge in self.edge_list:
+            vertexes.add(edge.s)
+            vertexes.add(edge.f)
+        return len(vertexes)
 
     def count_edges(self):
         return len(self.edge_list)

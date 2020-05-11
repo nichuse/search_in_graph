@@ -14,10 +14,10 @@
 #     print("Dijkstra algorithm")
 #     print("--- %s seconds ---" % (time.time() - start_time))
 #
-#     start_time = time.time()
-#     g.ford_bellman()
-#     print("Ford-Bellman algorithm")
-#     print("--- %s seconds ---" % (time.time() - start_time))
+    # start_time = time.time()
+    # g.ford_bellman()
+    # print("Ford-Bellman algorithm")
+    # print("--- %s seconds ---" % (time.time() - start_time))
 #
 #     start_time = time.time()
 #     g.levit()
