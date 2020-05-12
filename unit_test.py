@@ -109,65 +109,75 @@ class LevitTest(unittest.TestCase):
 
 class GenerateRandomGraphTest(unittest.TestCase):
     def test_size_graph(self):
-        g = generate_random_graph(4, 4, 2)
+        generator = RandomGraphGenerator(4, 4)
+        g = generator(2)
         self.assertEqual(g.count_edges(), 4)
         self.assertEqual(g.count_vertex(), 4)
         self.assertEqual(g.max_vertex(), 3)
 
     def test_determinate(self):
-        g = generate_random_graph(4, 4, 2)
+        generator = RandomGraphGenerator(4, 4)
+        g = generator(2)
         self.assertEqual(Dijkstra(g, 0, 2).get_path(), 855)
         self.assertEqual(Dijkstra(g, 0).get_path(), [0, INF, 855, INF])
 
 
 class GenerateCompleteGraphTest(unittest.TestCase):
     def test_size_graph(self):
-        g = generate_complete_graph(4, 2)
+        generator = CompleteGraphGenerator(4)
+        g = generator(2)
         self.assertEqual(g.count_edges(), 4 * 3)
         self.assertEqual(g.count_vertex(), 4)
         self.assertEqual(g.max_vertex(), 3)
 
     def test_determinate(self):
-        g = generate_complete_graph(4, 2)
+        generator = CompleteGraphGenerator(4)
+        g = generator(2)
         self.assertEqual(Dijkstra(g, 0, 2).get_path(), 883)
         self.assertEqual(Dijkstra(g, 0).get_path(), [0, 978, 883, 970])
 
 
 class GenerateBestForFordBellmanGraphTest(unittest.TestCase):
     def test_size_graph(self):
-        g = generate_best_for_ford_bellman(4, 4, 2)
+        generator = BestForFordBellmanGraphGenerator(4, 4)
+        g = generator(2)
         self.assertEqual(g.count_edges(), 4)
         self.assertEqual(g.count_vertex(), 4)
         self.assertEqual(g.max_vertex(), 3)
 
     def test_determinate(self):
-        g = generate_best_for_ford_bellman(6, 7, 2)
+        generator = BestForFordBellmanGraphGenerator(6, 7)
+        g = generator(2)
         self.assertEqual(Dijkstra(g, 0, 2).get_path(), 883)
         self.assertEqual(Dijkstra(g, 0).get_path(), [0, 978, 883, 970, 869, 57])
 
 
 class GenerateWorstForFordBellmanGraphTest(unittest.TestCase):
     def test_size_graph(self):
-        g = generate_worst_for_ford_bellman(5, 6, 2)
+        generator = WorstForFordBellmanGraphGenerator(5, 6)
+        g = generator(2)
         self.assertEqual(g.count_edges(), 6)
         self.assertEqual(g.count_vertex(), 5)
         self.assertEqual(g.max_vertex(), 4)
 
     def test_determinate(self):
-        g = generate_worst_for_ford_bellman(6, 7, 2)
+        generator = WorstForFordBellmanGraphGenerator(6, 7)
+        g = generator(2)
         self.assertEqual(Dijkstra(g, 0, 2).get_path(), 1861)
         self.assertEqual(Dijkstra(g, 0).get_path(), [0, 978, 1861, 2831, 3700, 3757])
 
 
 class GenerateWorstForLevitGraphTest(unittest.TestCase):
     def test_size_graph(self):
-        g = generate_worst_for_levit(5)
+        generator = WorstForLevitGenerator(5)
+        g = generator()
         self.assertEqual(g.count_edges(), 20)
         self.assertEqual(g.count_vertex(), 5)
         self.assertEqual(g.max_vertex(), 4)
 
     def test_determinate(self):
-        g = generate_worst_for_levit(6)
+        generator = WorstForLevitGenerator(6)
+        g = generator()
         self.assertEqual(Dijkstra(g, 0, 2).get_path(), 0)
         self.assertEqual(Dijkstra(g, 0).get_path(), [0, 0, 0, 0, 0, 0])
 
@@ -175,12 +185,14 @@ class GenerateWorstForLevitGraphTest(unittest.TestCase):
 class ComparisonTimeTest(unittest.TestCase):
     def test_generate_best_and_worst_ford_bellman(self):
         start_time = time.time()
-        g = generate_best_for_ford_bellman(1000, 5000, 2)
+        generator = BestForFordBellmanGraphGenerator(1000, 5000)
+        g = generator()
         FordBellman(g, 0).get_path()
         best_time = time.time() - start_time
 
         start_time = time.time()
-        g = generate_worst_for_ford_bellman(1000, 5000, 2)
+        generator = WorstForFordBellmanGraphGenerator(1000, 5000)
+        g = generator()
         FordBellman(g, 0).get_path()
         worst_time = time.time() - start_time
 
@@ -188,12 +200,14 @@ class ComparisonTimeTest(unittest.TestCase):
 
     def test_generate_worst_and_random_levit(self):
         start_time = time.time()
-        g = generate_complete_graph(100, 2)
+        generator = CompleteGraphGenerator(100)
+        g = generator()
         Levit(g, 0).get_path()
         best_time = time.time() - start_time
 
         start_time = time.time()
-        g = generate_worst_for_levit(100)
+        generator = WorstForLevitGenerator(100)
+        g = generator()
         Levit(g, 0).get_path()
         worst_time = time.time() - start_time
 
