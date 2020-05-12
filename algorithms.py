@@ -1,4 +1,5 @@
 from collections import deque
+from graph import Graph
 import heapq
 
 INF = 10 ** 10
@@ -112,3 +113,38 @@ class Levit(PathFinder):
 
             used.add(u)
         return distances
+
+
+class MinimalHamiltonPath:
+    def __init__(self, graph, vertexes_used):
+        self.graph = graph
+        self.vertexes_used = vertexes_used
+
+    def floyd(self):
+        size = self.graph.max_vertex
+        distances = [[INF for _ in range(size)] for _ in range(size)]
+        for edge in self.graph.edge_list:
+            distances[edge.s][edge.f] = edge.weight
+        for i in range(size):
+            for j in range(size):
+                for k in range(size):
+                    if distances[i][k] < INF and distances[k][j] < INF:
+                        distances[i][j] = min(
+                            distances[i][j],
+                            distances[i][k] + distances[k][j]
+                        )
+        return distances
+
+    def get_new_graph(self):
+        distances = self.floyd()
+        graph = Graph()
+        size = self.graph.max_vertex
+        for vertex in self.vertexes_used:
+            for i in range(size):
+                if vertex != i:
+                    graph.add_edge(vertex, i, distances[vertex][i])
+
+        return graph
+
+    def pathfinder(self):
+        pass
