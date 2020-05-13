@@ -48,12 +48,3 @@ class Graph:
 
     def count_edges(self):
         return len(self.edge_list)
-
-
-def edge_list_to_adjacency_list(edge_list, count_vertex):
-    adjacency_list = [[] for _ in range(count_vertex)]
-    for edge in edge_list:
-        adjacency_list[edge.s].append([edge.f, edge.dist])
-    for i in range(len(adjacency_list)):
-        adjacency_list[i].sort()
-    return adjacency_list

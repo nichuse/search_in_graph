@@ -3,8 +3,6 @@ from algorithms import *
 import time
 import unittest
 
-START_SEED = 10
-
 
 def init_graph():
     g = Graph()
@@ -124,14 +122,14 @@ class GenerateRandomGraphTest(unittest.TestCase):
 
 class GenerateCompleteGraphTest(unittest.TestCase):
     def test_size_graph(self):
-        generator = CompleteGraphGenerator(4)
+        generator = CompleteGraphGenerator(4, 6)
         g = generator(2)
         self.assertEqual(g.count_edges(), 4 * 3)
         self.assertEqual(g.count_vertex(), 4)
         self.assertEqual(g.max_vertex(), 3)
 
     def test_determinate(self):
-        generator = CompleteGraphGenerator(4)
+        generator = CompleteGraphGenerator(4, 6)
         g = generator(2)
         self.assertEqual(Dijkstra(g, 0, 2).get_path(), 883)
         self.assertEqual(Dijkstra(g, 0).get_path(), [0, 978, 883, 970])
@@ -169,17 +167,51 @@ class GenerateWorstForFordBellmanGraphTest(unittest.TestCase):
 
 class GenerateWorstForLevitGraphTest(unittest.TestCase):
     def test_size_graph(self):
-        generator = WorstForLevitGenerator(5)
+        generator = WorstForLevitGenerator(5, 10)
         g = generator()
         self.assertEqual(g.count_edges(), 20)
         self.assertEqual(g.count_vertex(), 5)
         self.assertEqual(g.max_vertex(), 4)
 
     def test_determinate(self):
-        generator = WorstForLevitGenerator(6)
+        generator = WorstForLevitGenerator(6, 15)
         g = generator()
         self.assertEqual(Dijkstra(g, 0, 2).get_path(), 0)
         self.assertEqual(Dijkstra(g, 0).get_path(), [0, 0, 0, 0, 0, 0])
+
+
+class MinimalPathBetweenSpecifiedVertexesTest(unittest.TestCase):
+    def test_prim(self):
+        g = init_graph()
+        edges = g.edge_list.copy()
+        for edge in edges:
+            g.add_edge(edge.f, edge.s, edge.weight)
+        pathfinder = MinimalPathBetweenSpecifiedVertexes(g, [2, 3, 4, 6])
+        self.assertEqual(pathfinder.get_min_path(), 112)
+        pathfinder.specified_vertexes = [2, 3, 4]
+        self.assertEqual(pathfinder.get_min_path(), 1)
+        pathfinder.specified_vertexes = [1, 2, 3, 4, 5]
+        self.assertGreaterEqual(pathfinder.get_min_path(), INF)
+
+    def test_get_graph_from_specified_vertexes(self):
+        g = init_graph()
+        pathfinder = MinimalPathBetweenSpecifiedVertexes(g, [2, 3, 4])
+        self.assertEqual(len(pathfinder.get_graph_from_specified_vertexes()), 3)
+        self.assertEqual(pathfinder.get_graph_from_specified_vertexes(),
+                         [[INF, INF, INF], [0, INF, 1], [INF, INF, INF]])
+
+    def test_floyd(self):
+        g = Graph()
+        g.add_edge(0, 1)
+        g.add_edge(1, 2)
+        g.add_edge(0, 2)
+        pathfinder = MinimalPathBetweenSpecifiedVertexes(g, [0])
+        self.assertEqual(pathfinder.floyd(),
+                         [[INF, 1, 1], [INF, INF, 1], [INF, INF, INF]])
+        g.add_edge(1, 0)
+        pathfinder = MinimalPathBetweenSpecifiedVertexes(g, [0])
+        self.assertEqual(pathfinder.floyd(),
+                         [[2, 1, 1], [1, 2, 1], [INF, INF, INF]])
 
 
 class ComparisonTimeTest(unittest.TestCase):
@@ -200,13 +232,13 @@ class ComparisonTimeTest(unittest.TestCase):
 
     def test_generate_worst_and_random_levit(self):
         start_time = time.time()
-        generator = CompleteGraphGenerator(100)
+        generator = CompleteGraphGenerator(100, 4950)
         g = generator()
         Levit(g, 0).get_path()
         best_time = time.time() - start_time
 
         start_time = time.time()
-        generator = WorstForLevitGenerator(100)
+        generator = WorstForLevitGenerator(100, 4950)
         g = generator()
         Levit(g, 0).get_path()
         worst_time = time.time() - start_time

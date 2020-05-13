@@ -1,71 +1,46 @@
-# from graph import Graph, edge_list_to_adjacency_list
-# from generators import Generator
-# import time
-#
-#
-# def start_algorithm(number_of_vertex, graph, text):
-#     print(text)
-#     print('---')
-#
-#     g = Graph(0, graph, edge_list_to_adjacency_list(graph, number_of_vertex))
-#
-#     start_time = time.time()
-#     g.dijkstra()
-#     print("Dijkstra algorithm")
-#     print("--- %s seconds ---" % (time.time() - start_time))
-#
-    # start_time = time.time()
-    # g.ford_bellman()
-    # print("Ford-Bellman algorithm")
-    # print("--- %s seconds ---" % (time.time() - start_time))
-#
-#     start_time = time.time()
-#     g.levit()
-#     print("Levit algorithm")
-#     print("--- %s seconds ---" % (time.time() - start_time))
-#     print()
-#
-#
-# if __name__ == '__main__':
-#     g = Graph()
-#     # g.add_edge(0, 1, 1)
-#     # g.add_edge(1, 0, 2)
-#     g.read_graph('g1.txt')
-#     g.read_graph('g1.txt')
-#     g.write_graph()
-#     for i in g.adjacency_list:
-#         print(i)
-#     # count_vertex = 100
-#     # start_algorithm(count_vertex, Generator(
-#     #     count_vertex, count_vertex).generate_worst_for_levit(),
-#     #                 'Worst for Levit')
-#     #
-#     # count_vertex = 1000
-#     # start_algorithm(count_vertex, Generator(
-#     #     count_vertex, count_vertex).generate_complete_graph(),
-#     #                 'Random complete graph')
-#     #
-#     # count_vertex = 1000
-#     # count_edges = 10000
-#     # start_algorithm(count_vertex, Generator(
-#     #     count_vertex, count_edges, seed_different=1).generate_random_graph(),
-#     #                 'Random graph')
-#     #
-#     # start_algorithm(count_vertex, Generator(
-#     #     count_vertex, count_edges).generate_best_for_ford_bellman(),
-#     #                 'Best for Ford Bellman')
-#     #
-#     # start_algorithm(count_vertex, Generator(
-#     #     count_vertex, count_edges).generate_worst_for_ford_bellman(),
-#     #                 'Worst for Ford Bellman')
+from generators import *
+import argparse
 
-import random
+GENERATORS = {
+    'random': RandomGraphGenerator,
+    'complete': CompleteGraphGenerator,
+    'best for ford-bellman': BestForFordBellmanGraphGenerator,
+    'worst for ford-bellman': WorstForFordBellmanGraphGenerator,
+    'worst for levit': WorstForFordBellmanGraphGenerator,
+}
 
-random.seed(1)
-print(random.randint(1, 100))
-# random.seed = 1
 
-print(random.randint(1, 100))
-# random.seed = 1
+def parseargs():
+    description = '''
+                Generate graph
+                Possible generators name
+                1. random
+                2. complete
+                3. best for ford-bellman
+                4. worst for ford-bellman
+                5. worst for levit
+                '''
+    parser = argparse.ArgumentParser(description=description)
+    parser.add_argument('-e', action='store', dest='count_edges',
+                        type=int)
+    parser.add_argument('-v', action='store', dest='count_vertex',
+                        type=int)
+    parser.add_argument('-n', action='store', dest='name_generator',
+                        type=str, default='random')
+    parser.add_argument('-fn', action='store', dest='filename',
+                        type=str, help='file name where to save generated graph')
+    parser.add_argument('-s', action='store', dest='seed',
+                        type=int)
 
-print(random.randint(1, 100))
+    return parser.parse_args()
+
+
+def generate(arguments):
+    generator = GENERATORS[arguments.name_generator](arguments.count_vertex,
+                                                     arguments.count_edges)
+    graph = generator(arguments.seed)
+    graph.save(arguments.filename)
+
+
+if __name__ == '__main__':
+    generate(parseargs())

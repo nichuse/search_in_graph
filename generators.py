@@ -6,7 +6,7 @@ MIN_EDGE_COST = 0
 
 
 class Generator:
-    def __init__(self, count_vertex, count_edges):
+    def __init__(self, count_vertex, count_edges=0):
         self.count_vertex = count_vertex
         self.count_edges = count_edges
 
@@ -94,14 +94,8 @@ class WorstForFordBellmanGraphGenerator(Generator):
         return graph
 
 
-class WorstForLevitGenerator:
-    def __init__(self, count_vertex):
-        self.count_vertex = count_vertex
-
-    def __call__(self):
-        return self.generate()
-
-    def generate(self):
+class WorstForLevitGenerator(Generator):
+    def generate(self, seed):
         graph = Graph()
         for i in range(1, self.count_vertex):
             for j in range(i + 1, self.count_vertex):
@@ -118,13 +112,7 @@ class WorstForLevitGenerator:
         return graph
 
 
-class CompleteGraphGenerator:
-    def __init__(self, count_vertex):
-        self.count_vertex = count_vertex
-
-    def __call__(self, seed=0):
-        return self.generate(seed)
-
+class CompleteGraphGenerator(Generator):
     def generate(self, seed):
         graph = Graph()
         random.seed(seed)

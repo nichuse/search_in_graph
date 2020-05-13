@@ -115,14 +115,14 @@ class Levit(PathFinder):
         return distances
 
 
-class MinimalHamiltonPath:
-    def __init__(self, graph, vertexes_used):
+class MinimalPathBetweenSpecifiedVertexes:
+    def __init__(self, graph, specified_vertexes):
         self.graph = graph
-        self.vertexes_used = vertexes_used
+        self.specified_vertexes = specified_vertexes
 
     def floyd(self):
-        size = self.graph.max_vertex
-        distances = [[INF for _ in range(size)] for _ in range(size)]
+        size = self.graph.max_vertex()
+        distances = [[INF for _ in range(size + 1)] for _ in range(size + 1)]
         for edge in self.graph.edge_list:
             distances[edge.s][edge.f] = edge.weight
         for i in range(size):
@@ -135,16 +135,34 @@ class MinimalHamiltonPath:
                         )
         return distances
 
-    def get_new_graph(self):
+    def prim(self):
+        graph = self.get_graph_from_specified_vertexes()
+        size = len(self.specified_vertexes)
+        used = [False for _ in range(size)]
+        min_edges_weight = [INF for _ in range(size)]
+        min_edges_weight[0] = 0
+
+        for i in range(size):
+            v = -1
+            for j in range(size):
+                if not used[j] and (v == -1 or min_edges_weight[j] < min_edges_weight[v]):
+                    v = j
+            used[v] = True
+
+            for j in range(size):
+                min_edges_weight[j] = min(min_edges_weight[j], graph[v][j])
+        return min_edges_weight
+
+    def get_min_path(self):
+        return sum(self.prim())
+
+    def get_graph_from_specified_vertexes(self):
         distances = self.floyd()
-        graph = Graph()
-        size = self.graph.max_vertex
-        for vertex in self.vertexes_used:
-            for i in range(size):
-                if vertex != i:
-                    graph.add_edge(vertex, i, distances[vertex][i])
+        size = len(self.specified_vertexes)
+        new_graph = [[INF for _ in range(size)] for _ in range(size)]
+        for i in range(size):
+            for j in range(size):
+                if j != i:
+                    new_graph[i][j] = distances[self.specified_vertexes[i]][self.specified_vertexes[j]]
 
-        return graph
-
-    def pathfinder(self):
-        pass
+        return new_graph
