@@ -180,6 +180,21 @@ class GenerateWorstForLevitGraphTest(unittest.TestCase):
         self.assertEqual(Dijkstra(g, 0).get_path(), [0, 0, 0, 0, 0, 0])
 
 
+class GenerateUndirectedConnectedRandomGraphTest(unittest.TestCase):
+    def test_size_graph(self):
+        generator = UndirectedConnectedRandomGraphGenerator(5, 10)
+        g = generator()
+        self.assertEqual(g.count_edges(), 10)
+        self.assertEqual(g.count_vertex(), 5)
+        self.assertEqual(g.max_vertex(), 4)
+
+    def test_determinate(self):
+        generator = UndirectedConnectedRandomGraphGenerator(6, 15)
+        g = generator()
+        self.assertEqual(Dijkstra(g, 0, 2).get_path(), 1186)
+        self.assertEqual(Dijkstra(g, 0).get_path(), [0, 654, 1186, 553, 288, 722])
+
+
 class MinimalPathBetweenSpecifiedVertexesTest(unittest.TestCase):
     def test_prim(self):
         g = init_graph()

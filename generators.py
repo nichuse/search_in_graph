@@ -128,15 +128,15 @@ class CompleteGraphGenerator(Generator):
 
 
 class UndirectedConnectedRandomGraphGenerator(Generator):
-    def generate(self, seed):
+    def generate(self, seed=0):
         random.seed(seed)
         g = Graph()
-        vertexes = set(i for i in range(self.count_vertex))
+        vertexes = [i for i in range(self.count_vertex)]
         used_edge = {}
-        used_vertexes = set()
+        used_vertexes = []
         v = random.choice(vertexes)
         vertexes.remove(v)
-        used_vertexes.add(v)
+        used_vertexes.append(v)
         count_edges = 0
 
         while len(vertexes) > 0:
@@ -145,23 +145,44 @@ class UndirectedConnectedRandomGraphGenerator(Generator):
             weight = random.randint(MIN_EDGE_COST, MAX_EDGE_COST)
             g.add_edge(s, f, weight)
             g.add_edge(f, s, weight)
-            used_edge[{s, f}] = True
-            used_edge[{f, s}] = True
+            used_edge[(s, f)] = True
+            used_edge[(f, s)] = True
             count_edges += 2
             vertexes.remove(s)
-            used_vertexes.add(f)
+            used_vertexes.append(s)
             if count_edges >= self.count_edges:
                 break
 
-        for i in range((self.count_edges - count_edges) // 2):
+        while (self.count_edges - count_edges) // 2 > 0:
             s = random.choice(used_vertexes)
-            while True:
+            f = 0
+            for _ in range(self.count_vertex):
                 f = random.choice(used_vertexes)
-                if f != s:
+                if f != s and (s, f) not in used_edge.keys():
                     break
-            weight = random.randint(MIN_EDGE_COST, MAX_EDGE_COST)
-            g.add_edge(s, f, weight)
-            g.add_edge(f, s, weight)
-            used_edge[{s, f}] = True
-            used_edge[{f, s}] = True
+            if (s, f) not in used_edge.keys():
+                weight = random.randint(MIN_EDGE_COST, MAX_EDGE_COST)
+                g.add_edge(s, f, weight)
+                g.add_edge(f, s, weight)
+                count_edges += 2
+                used_edge[(s, f)] = True
+                used_edge[(f, s)] = True
+
         return g
+
+
+class RandomListVertexesGenerator:
+    def __init__(self, max_value, count_vertexes):
+        self.count_vertexes = count_vertexes
+        self.max_value = max_value
+
+    def generate(self, seed):
+        random.seed(seed)
+        vertexes = []
+        used = [False for _ in range(self.max_value)]
+        while len(vertexes) < self.count_vertexes:
+            v = random.randint(0, self.max_value)
+            if not used[v]:
+                vertexes.append(v)
+                used[v] = True
+        return vertexes
