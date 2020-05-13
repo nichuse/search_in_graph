@@ -206,11 +206,11 @@ class MinimalPathBetweenSpecifiedVertexesTest(unittest.TestCase):
         g.add_edge(1, 2)
         g.add_edge(0, 2)
         pathfinder = MinimalPathBetweenSpecifiedVertexes(g, [0])
-        self.assertEqual(pathfinder.floyd(),
+        self.assertEqual(pathfinder.floyd_algorithm(),
                          [[INF, 1, 1], [INF, INF, 1], [INF, INF, INF]])
         g.add_edge(1, 0)
         pathfinder = MinimalPathBetweenSpecifiedVertexes(g, [0])
-        self.assertEqual(pathfinder.floyd(),
+        self.assertEqual(pathfinder.floyd_algorithm(),
                          [[2, 1, 1], [1, 2, 1], [INF, INF, INF]])
 
 

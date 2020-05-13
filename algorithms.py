@@ -120,7 +120,7 @@ class MinimalPathBetweenSpecifiedVertexes:
         self.graph = graph
         self.specified_vertexes = specified_vertexes
 
-    def floyd(self):
+    def floyd_algorithm(self):
         size = self.graph.max_vertex()
         distances = [[INF for _ in range(size + 1)] for _ in range(size + 1)]
         for edge in self.graph.edge_list:
@@ -135,7 +135,7 @@ class MinimalPathBetweenSpecifiedVertexes:
                         )
         return distances
 
-    def prim(self):
+    def prim_algorithm(self):
         graph = self.get_graph_from_specified_vertexes()
         size = len(self.specified_vertexes)
         used = [False for _ in range(size)]
@@ -154,10 +154,10 @@ class MinimalPathBetweenSpecifiedVertexes:
         return min_edges_weight
 
     def get_min_path(self):
-        return sum(self.prim())
+        return sum(self.prim_algorithm())
 
     def get_graph_from_specified_vertexes(self):
-        distances = self.floyd()
+        distances = self.floyd_algorithm()
         size = len(self.specified_vertexes)
         new_graph = [[INF for _ in range(size)] for _ in range(size)]
         for i in range(size):

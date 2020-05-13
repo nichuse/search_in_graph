@@ -125,3 +125,43 @@ class CompleteGraphGenerator(Generator):
                         random.randint(MIN_EDGE_COST, MAX_EDGE_COST)
                     )
         return graph
+
+
+class UndirectedConnectedRandomGraphGenerator(Generator):
+    def generate(self, seed):
+        random.seed(seed)
+        g = Graph()
+        vertexes = set(i for i in range(self.count_vertex))
+        used_edge = {}
+        used_vertexes = set()
+        v = random.choice(vertexes)
+        vertexes.remove(v)
+        used_vertexes.add(v)
+        count_edges = 0
+
+        while len(vertexes) > 0:
+            s = random.choice(vertexes)
+            f = random.choice(used_vertexes)
+            weight = random.randint(MIN_EDGE_COST, MAX_EDGE_COST)
+            g.add_edge(s, f, weight)
+            g.add_edge(f, s, weight)
+            used_edge[{s, f}] = True
+            used_edge[{f, s}] = True
+            count_edges += 2
+            vertexes.remove(s)
+            used_vertexes.add(f)
+            if count_edges >= self.count_edges:
+                break
+
+        for i in range((self.count_edges - count_edges) // 2):
+            s = random.choice(used_vertexes)
+            while True:
+                f = random.choice(used_vertexes)
+                if f != s:
+                    break
+            weight = random.randint(MIN_EDGE_COST, MAX_EDGE_COST)
+            g.add_edge(s, f, weight)
+            g.add_edge(f, s, weight)
+            used_edge[{s, f}] = True
+            used_edge[{f, s}] = True
+        return g
