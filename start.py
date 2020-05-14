@@ -7,6 +7,7 @@ GENERATORS = {
     'best for ford-bellman': BestForFordBellmanGraphGenerator,
     'worst for ford-bellman': WorstForFordBellmanGraphGenerator,
     'worst for levit': WorstForFordBellmanGraphGenerator,
+    'connected random graph': UndirectedConnectedRandomGraphGenerator
 }
 
 
@@ -19,6 +20,7 @@ def parseargs():
                 3. best for ford-bellman
                 4. worst for ford-bellman
                 5. worst for levit
+                6. connected random graph
                 '''
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('-e', action='store', dest='count_edges',
