@@ -28,7 +28,8 @@ def parseargs():
     parser.add_argument('-n', action='store', dest='name_generator',
                         type=str, default='random')
     parser.add_argument('-fn', action='store', dest='filename',
-                        type=str, help='file name where to save generated graph')
+                        type=str,
+                        help='file name where to save generated graph')
     parser.add_argument('-s', action='store', dest='seed',
                         type=int)
 

@@ -53,7 +53,8 @@ class DijkstraTest(unittest.TestCase):
         self.assertEqual(Dijkstra(g, 1, 0).get_path(), 5)
         self.assertEqual(Dijkstra(g, 3, 15).get_path(), 5)
         self.assertEqual(Dijkstra(g, 3, 12).get_path(), INF)
-        self.assertEqual(Dijkstra(g, 0).get_path(), [0, 2] + [INF for _ in range(14)])
+        self.assertEqual(Dijkstra(g, 0).get_path(), [0, 2] +
+                         [INF for _ in range(14)])
 
     def test_applicability_of_these_graph(self):
         g = init_graph()
@@ -71,17 +72,21 @@ class FordBellmanTest(unittest.TestCase):
         self.assertEqual(FordBellman(g, 1, 0).get_path(), 5)
         self.assertEqual(FordBellman(g, 3, 15).get_path(), 5)
         self.assertEqual(FordBellman(g, 3, 12).get_path(), INF)
-        self.assertEqual(FordBellman(g, 0).get_path(), [0, 2] + [INF for _ in range(14)])
+        self.assertEqual(FordBellman(g, 0).get_path(), [0, 2] +
+                         [INF for _ in range(14)])
 
     def test_applicability_of_these_graph(self):
         g = init_graph()
-        self.assertEqual(FordBellman(g, 0).applicability_of_these_graph(), True)
+        self.assertEqual(FordBellman(g, 0).applicability_of_these_graph(),
+                         True)
         g = Graph()
         g.add_edge(0, 1, -1)
-        self.assertEqual(FordBellman(g, 0).applicability_of_these_graph(), True)
+        self.assertEqual(FordBellman(g, 0).applicability_of_these_graph(),
+                         True)
         g.add_edge(1, 2, 1)
         g.add_edge(2, 0, -1)
-        self.assertEqual(FordBellman(g, 0).applicability_of_these_graph(), False)
+        self.assertEqual(FordBellman(g, 0).applicability_of_these_graph(),
+                         False)
 
 
 class LevitTest(unittest.TestCase):
@@ -89,7 +94,8 @@ class LevitTest(unittest.TestCase):
         g = init_graph()
         p = FordBellman(g, 0, 1)
         self.assertEqual(p.get_path(), 2)
-        self.assertEqual(Levit(g, 0).get_path(), [0, 2] + [INF for _ in range(14)])
+        self.assertEqual(Levit(g, 0).get_path(), [0, 2] +
+                         [INF for _ in range(14)])
         self.assertEqual(Levit(g, 1, 0).get_path(), 5)
         self.assertEqual(Levit(g, 3, 15).get_path(), 5)
         self.assertEqual(Levit(g, 3, 12).get_path(), INF)
@@ -102,7 +108,8 @@ class LevitTest(unittest.TestCase):
         self.assertEqual(Levit(g, 0).applicability_of_these_graph(), True)
         g.add_edge(1, 2, 1)
         g.add_edge(2, 0, -1)
-        self.assertEqual(FordBellman(g, 0).applicability_of_these_graph(), False)
+        self.assertEqual(FordBellman(g, 0).applicability_of_these_graph(),
+                         False)
 
 
 class GenerateRandomGraphTest(unittest.TestCase):
@@ -132,7 +139,8 @@ class GenerateCompleteGraphTest(unittest.TestCase):
         generator = CompleteGraphGenerator(4, 6)
         g = generator(2)
         self.assertEqual(Dijkstra(g, 0, 2).get_path(), 883)
-        self.assertEqual(Dijkstra(g, 0).get_path(), [0, 978, 883, 970])
+        self.assertEqual(Dijkstra(g, 0).get_path(),
+                         [0, 978, 883, 970])
 
 
 class GenerateBestForFordBellmanGraphTest(unittest.TestCase):
@@ -147,7 +155,8 @@ class GenerateBestForFordBellmanGraphTest(unittest.TestCase):
         generator = BestForFordBellmanGraphGenerator(6, 7)
         g = generator(2)
         self.assertEqual(Dijkstra(g, 0, 2).get_path(), 883)
-        self.assertEqual(Dijkstra(g, 0).get_path(), [0, 978, 883, 970, 869, 57])
+        self.assertEqual(Dijkstra(g, 0).get_path(),
+                         [0, 978, 883, 970, 869, 57])
 
 
 class GenerateWorstForFordBellmanGraphTest(unittest.TestCase):
@@ -162,7 +171,8 @@ class GenerateWorstForFordBellmanGraphTest(unittest.TestCase):
         generator = WorstForFordBellmanGraphGenerator(6, 7)
         g = generator(2)
         self.assertEqual(Dijkstra(g, 0, 2).get_path(), 1861)
-        self.assertEqual(Dijkstra(g, 0).get_path(), [0, 978, 1861, 2831, 3700, 3757])
+        self.assertEqual(Dijkstra(g, 0).get_path(),
+                         [0, 978, 1861, 2831, 3700, 3757])
 
 
 class GenerateWorstForLevitGraphTest(unittest.TestCase):
@@ -192,7 +202,8 @@ class GenerateUndirectedConnectedRandomGraphTest(unittest.TestCase):
         generator = UndirectedConnectedRandomGraphGenerator(6, 15)
         g = generator()
         self.assertEqual(Dijkstra(g, 0, 2).get_path(), 1186)
-        self.assertEqual(Dijkstra(g, 0).get_path(), [0, 654, 1186, 553, 288, 722])
+        self.assertEqual(Dijkstra(g, 0).get_path(),
+                         [0, 654, 1186, 553, 288, 722])
 
 
 class MinimalPathBetweenSpecifiedVertexesTest(unittest.TestCase):
@@ -211,7 +222,8 @@ class MinimalPathBetweenSpecifiedVertexesTest(unittest.TestCase):
     def test_get_graph_from_specified_vertexes(self):
         g = init_graph()
         pathfinder = MinimalPathBetweenSpecifiedVertexes(g, [2, 3, 4])
-        self.assertEqual(len(pathfinder.get_graph_from_specified_vertexes()), 3)
+        self.assertEqual(len(pathfinder.get_graph_from_specified_vertexes()),
+                         3)
         self.assertEqual(pathfinder.get_graph_from_specified_vertexes(),
                          [[INF, INF, INF], [0, INF, 1], [INF, INF, INF]])
 

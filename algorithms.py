@@ -1,5 +1,4 @@
 from collections import deque
-from graph import Graph
 import heapq
 
 INF = 10 ** 10
@@ -27,8 +26,8 @@ class PathFinder:
         for _ in range(len(self.graph.adjacency_list) + 1):
             check = True
             for edge in self.graph.edge_list:
-                if distances[edge.s] < INF and distances[edge.s] + edge.weight \
-                        < distances[edge.f]:
+                if distances[edge.s] < INF and distances[edge.s] +\
+                        edge.weight < distances[edge.f]:
                     distances[edge.f] = distances[edge.s] + edge.weight
                     check = False
         if not check:
@@ -73,8 +72,8 @@ class FordBellman(PathFinder):
         for _ in range(len(self.graph.adjacency_list)):
             check = True
             for edge in self.graph.edge_list:
-                if distances[edge.s] < INF and distances[edge.s] + edge.weight \
-                        < distances[edge.f]:
+                if distances[edge.s] < INF and distances[edge.s]\
+                        + edge.weight < distances[edge.f]:
                     distances[edge.f] = distances[edge.s] + edge.weight
                     check = False
             if check:
@@ -145,7 +144,8 @@ class MinimalPathBetweenSpecifiedVertexes:
         for i in range(size):
             v = -1
             for j in range(size):
-                if not used[j] and (v == -1 or min_edges_weight[j] < min_edges_weight[v]):
+                if not used[j] and (v == -1 or min_edges_weight[j]
+                                    < min_edges_weight[v]):
                     v = j
             used[v] = True
 
@@ -163,6 +163,8 @@ class MinimalPathBetweenSpecifiedVertexes:
         for i in range(size):
             for j in range(size):
                 if j != i:
-                    new_graph[i][j] = distances[self.specified_vertexes[i]][self.specified_vertexes[j]]
+                    new_graph[i][j] = distances[
+                        self.specified_vertexes[i]
+                    ][self.specified_vertexes[j]]
 
         return new_graph
