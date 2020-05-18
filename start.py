@@ -8,6 +8,7 @@ from generators import (
 )
 import argparse
 
+
 GENERATORS = {
     'random': RandomGraphGenerator,
     'complete': CompleteGraphGenerator,

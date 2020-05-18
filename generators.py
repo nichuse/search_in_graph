@@ -139,7 +139,7 @@ class UndirectedConnectedRandomGraphGenerator(Generator):
         used_vertexes.append(v)
         count_edges = 0
 
-        while len(vertexes) > 0:
+        while vertexes:
             s = random.choice(vertexes)
             f = random.choice(used_vertexes)
             weight = random.randint(MIN_EDGE_COST, MAX_EDGE_COST)

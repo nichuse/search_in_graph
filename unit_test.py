@@ -61,6 +61,23 @@ class GraphTests(unittest.TestCase):
         g.add_edge(3, 100, -1)
         self.assertEqual(g.adjacent_vertex(3), [[4, 1], [2, 0], [100, -1]])
 
+    def test_save_graph(self):
+        g = Graph()
+        g.add_edge(0, 1)
+        g.add_edge(0, 2, 2)
+        with open('test_graph.txt', 'w') as graph:
+            g.save(graph)
+
+        with open('test_graph.txt', 'r') as graph:
+            read_graph = graph.read()
+        self.assertEqual(read_graph, str(g))
+
+    def test_read_graph(self):
+        g = Graph()
+        with open('test_graph.txt', 'r') as graph:
+            g.read(graph)
+        self.assertEqual('0 1 1\n0 2 2\n', str(g))
+
 
 class DijkstraTest(unittest.TestCase):
     def test_pathfinder(self):
