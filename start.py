@@ -35,13 +35,20 @@ def parseargs():
                         type=int)
     parser.add_argument('-v', action='store', dest='count_vertex',
                         type=int)
-    parser.add_argument('-n', action='store', dest='name_generator',
+    parser.add_argument('-gn', action='store', dest='name_generator',
+                        choices=['random',
+                                 'complete',
+                                 'best for ford-bellman',
+                                 'worst for ford-bellman',
+                                 'worst for levit',
+                                 'connected random graph'
+                                 ],
                         type=str, default='random')
     parser.add_argument('-fn', action='store', dest='filename',
-                        type=str,
+                        type=str, default='stdout',
                         help='file name where to save generated graph')
     parser.add_argument('-s', action='store', dest='seed',
-                        type=int)
+                        default=0, type=int)
 
     return parser.parse_args()
 
@@ -50,7 +57,11 @@ def generate(arguments):
     generator = GENERATORS[arguments.name_generator](arguments.count_vertex,
                                                      arguments.count_edges)
     graph = generator(arguments.seed)
-    graph.save(arguments.filename)
+    if arguments.filename == 'stdout':
+        print(str(graph))
+    else:
+        with open(arguments.filename, 'w') as file:
+            graph.save(file)
 
 
 if __name__ == '__main__':
