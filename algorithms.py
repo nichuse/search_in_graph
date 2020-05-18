@@ -5,23 +5,12 @@ INF = 10 ** 10
 
 
 class PathFinder:
-    def __init__(self, graph, start, *args):
+    def __init__(self, graph):
         self.graph = graph
-        self.start = start
-        if len(args) == 1:
-            self.finish = args[0]
-        else:
-            self.finish = -1
-
-    def get_path(self):
-        if self.finish == -1:
-            return self.pathfinder()
-        else:
-            return self.pathfinder()[self.finish]
 
     def applicability_of_these_graph(self):
         distances = [INF for _ in range(self.graph.max_vertex() + 1)]
-        distances[self.start] = 0
+        distances[0] = 0
         check = True
         for _ in range(len(self.graph.adjacency_list) + 1):
             check = True
@@ -34,16 +23,16 @@ class PathFinder:
             return False
         return True
 
-    def pathfinder(self):
-        return []
+    def pathfinder(self, start, end=None):
+        pass
 
 
 class Dijkstra(PathFinder):
-    def pathfinder(self):
+    def pathfinder(self, start=0, end=None):
         distances = [INF for _ in range(self.graph.max_vertex() + 1)]
-        distances[self.start] = 0
+        distances[start] = 0
         q = []
-        heapq.heappush(q, (0, self.start))
+        heapq.heappush(q, (0, start))
 
         while q:
             dist, v = heapq.heappop(q)
@@ -55,7 +44,7 @@ class Dijkstra(PathFinder):
                     distances[u] = distances[v] + len_edge
                     heapq.heappush(q, (distances[u], u))
 
-        return distances
+        return distances if end is None else distances[end]
 
     def applicability_of_these_graph(self):
         for edge in self.graph.edge_list:
@@ -65,9 +54,9 @@ class Dijkstra(PathFinder):
 
 
 class FordBellman(PathFinder):
-    def pathfinder(self):
+    def pathfinder(self, start=0, end=None):
         distances = [INF for _ in range(self.graph.max_vertex() + 1)]
-        distances[self.start] = 0
+        distances[start] = 0
 
         for _ in range(len(self.graph.adjacency_list)):
             check = True
@@ -78,20 +67,20 @@ class FordBellman(PathFinder):
                     check = False
             if check:
                 break
-        return distances
+        return distances if end is None else distances[end]
 
 
 class Levit(PathFinder):
-    def pathfinder(self):
+    def pathfinder(self, start=0, end=None):
         distances = [INF for _ in range(self.graph.max_vertex() + 1)]
-        distances[self.start] = 0
+        distances[start] = 0
         q1 = deque()
         q2 = deque()
-        q1.append(self.start)
+        q1.append(start)
         unused = set()
         used = set()
         for v in range(len(self.graph.adjacency_list)):
-            if v != self.start:
+            if v != start:
                 unused.add(v)
         while q1 or q2:
             if q2:
@@ -111,7 +100,7 @@ class Levit(PathFinder):
                     distances[v] = min(distances[v], distances[u] + dist)
 
             used.add(u)
-        return distances
+        return distances if end is None else distances[end]
 
 
 class MinimalPathBetweenSpecifiedVertexes:

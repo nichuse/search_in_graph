@@ -81,67 +81,67 @@ class GraphTests(unittest.TestCase):
 
 class DijkstraTest(unittest.TestCase):
     def test_pathfinder(self):
-        g = init_graph()
-        self.assertEqual(Dijkstra(g, 0, 1).get_path(), 2)
-        self.assertEqual(Dijkstra(g, 1, 0).get_path(), 5)
-        self.assertEqual(Dijkstra(g, 3, 15).get_path(), 5)
-        self.assertEqual(Dijkstra(g, 3, 12).get_path(), INF)
-        self.assertEqual(Dijkstra(g, 0).get_path(), [0, 2] +
+        min_path = Dijkstra(init_graph())
+        self.assertEqual(min_path.pathfinder(0, 1), 2)
+        self.assertEqual(min_path.pathfinder(1, 0), 5)
+        self.assertEqual(min_path.pathfinder(3, 15), 5)
+        self.assertEqual(min_path.pathfinder(3, 12), INF)
+        self.assertEqual(min_path.pathfinder(0), [0, 2] +
                          [INF for _ in range(14)])
 
     def test_applicability_of_these_graph(self):
         g = init_graph()
-        self.assertEqual(Dijkstra(g, 0).applicability_of_these_graph(), True)
+        self.assertEqual(Dijkstra(g).applicability_of_these_graph(), True)
         g = Graph()
         g.add_edge(0, 1, -1)
-        self.assertEqual(Dijkstra(g, 0).applicability_of_these_graph(), False)
+        self.assertEqual(Dijkstra(g).applicability_of_these_graph(), False)
 
 
 class FordBellmanTest(unittest.TestCase):
     def test_pathfinder(self):
         g = init_graph()
-        p = FordBellman(g, 0, 1)
-        self.assertEqual(p.get_path(), 2)
-        self.assertEqual(FordBellman(g, 1, 0).get_path(), 5)
-        self.assertEqual(FordBellman(g, 3, 15).get_path(), 5)
-        self.assertEqual(FordBellman(g, 3, 12).get_path(), INF)
-        self.assertEqual(FordBellman(g, 0).get_path(), [0, 2] +
+        p = FordBellman(g)
+        self.assertEqual(p.pathfinder(0, 1), 2)
+        self.assertEqual(FordBellman(g).pathfinder(1, 0), 5)
+        self.assertEqual(FordBellman(g).pathfinder(3, 15), 5)
+        self.assertEqual(FordBellman(g).pathfinder(3, 12), INF)
+        self.assertEqual(FordBellman(g).pathfinder(0), [0, 2] +
                          [INF for _ in range(14)])
 
     def test_applicability_of_these_graph(self):
         g = init_graph()
-        self.assertEqual(FordBellman(g, 0).applicability_of_these_graph(),
+        self.assertEqual(FordBellman(g).applicability_of_these_graph(),
                          True)
         g = Graph()
         g.add_edge(0, 1, -1)
-        self.assertEqual(FordBellman(g, 0).applicability_of_these_graph(),
+        self.assertEqual(FordBellman(g).applicability_of_these_graph(),
                          True)
         g.add_edge(1, 2, 1)
         g.add_edge(2, 0, -1)
-        self.assertEqual(FordBellman(g, 0).applicability_of_these_graph(),
+        self.assertEqual(FordBellman(g).applicability_of_these_graph(),
                          False)
 
 
 class LevitTest(unittest.TestCase):
     def test_pathfinder(self):
         g = init_graph()
-        p = FordBellman(g, 0, 1)
-        self.assertEqual(p.get_path(), 2)
-        self.assertEqual(Levit(g, 0).get_path(), [0, 2] +
+        p = FordBellman(g)
+        self.assertEqual(p.pathfinder(0, 1), 2)
+        self.assertEqual(Levit(g).pathfinder(0), [0, 2] +
                          [INF for _ in range(14)])
-        self.assertEqual(Levit(g, 1, 0).get_path(), 5)
-        self.assertEqual(Levit(g, 3, 15).get_path(), 5)
-        self.assertEqual(Levit(g, 3, 12).get_path(), INF)
+        self.assertEqual(Levit(g).pathfinder(1, 0), 5)
+        self.assertEqual(Levit(g).pathfinder(3, 15), 5)
+        self.assertEqual(Levit(g).pathfinder(3, 12), INF)
 
     def test_applicability_of_these_graph(self):
         g = init_graph()
-        self.assertEqual(Levit(g, 0).applicability_of_these_graph(), True)
+        self.assertEqual(Levit(g).applicability_of_these_graph(), True)
         g = Graph()
         g.add_edge(0, 1, -1)
-        self.assertEqual(Levit(g, 0).applicability_of_these_graph(), True)
+        self.assertEqual(Levit(g).applicability_of_these_graph(), True)
         g.add_edge(1, 2, 1)
         g.add_edge(2, 0, -1)
-        self.assertEqual(FordBellman(g, 0).applicability_of_these_graph(),
+        self.assertEqual(FordBellman(g).applicability_of_these_graph(),
                          False)
 
 
@@ -156,8 +156,8 @@ class GenerateRandomGraphTest(unittest.TestCase):
     def test_determinate(self):
         generator = RandomGraphGenerator(4, 4)
         g = generator(2)
-        self.assertEqual(Dijkstra(g, 0, 2).get_path(), 855)
-        self.assertEqual(Dijkstra(g, 0).get_path(), [0, INF, 855, INF])
+        self.assertEqual(Dijkstra(g).pathfinder(0, 2), 855)
+        self.assertEqual(Dijkstra(g).pathfinder(0), [0, INF, 855, INF])
 
 
 class GenerateCompleteGraphTest(unittest.TestCase):
@@ -171,8 +171,8 @@ class GenerateCompleteGraphTest(unittest.TestCase):
     def test_determinate(self):
         generator = CompleteGraphGenerator(4, 6)
         g = generator(2)
-        self.assertEqual(Dijkstra(g, 0, 2).get_path(), 883)
-        self.assertEqual(Dijkstra(g, 0).get_path(),
+        self.assertEqual(Dijkstra(g).pathfinder(0, 2), 883)
+        self.assertEqual(Dijkstra(g).pathfinder(0),
                          [0, 978, 883, 970])
 
 
@@ -187,8 +187,8 @@ class GenerateBestForFordBellmanGraphTest(unittest.TestCase):
     def test_determinate(self):
         generator = BestForFordBellmanGraphGenerator(6, 7)
         g = generator(2)
-        self.assertEqual(Dijkstra(g, 0, 2).get_path(), 883)
-        self.assertEqual(Dijkstra(g, 0).get_path(),
+        self.assertEqual(Dijkstra(g).pathfinder(0, 2), 883)
+        self.assertEqual(Dijkstra(g).pathfinder(0),
                          [0, 978, 883, 970, 869, 57])
 
 
@@ -203,8 +203,8 @@ class GenerateWorstForFordBellmanGraphTest(unittest.TestCase):
     def test_determinate(self):
         generator = WorstForFordBellmanGraphGenerator(6, 7)
         g = generator(2)
-        self.assertEqual(Dijkstra(g, 0, 2).get_path(), 1861)
-        self.assertEqual(Dijkstra(g, 0).get_path(),
+        self.assertEqual(Dijkstra(g).pathfinder(0, 2), 1861)
+        self.assertEqual(Dijkstra(g).pathfinder(0),
                          [0, 978, 1861, 2831, 3700, 3757])
 
 
@@ -219,8 +219,8 @@ class GenerateWorstForLevitGraphTest(unittest.TestCase):
     def test_determinate(self):
         generator = WorstForLevitGenerator(6, 15)
         g = generator()
-        self.assertEqual(Dijkstra(g, 0, 2).get_path(), 0)
-        self.assertEqual(Dijkstra(g, 0).get_path(), [0, 0, 0, 0, 0, 0])
+        self.assertEqual(Dijkstra(g).pathfinder(0, 2), 0)
+        self.assertEqual(Dijkstra(g).pathfinder(0), [0, 0, 0, 0, 0, 0])
 
 
 class GenerateUndirectedConnectedRandomGraphTest(unittest.TestCase):
@@ -234,8 +234,8 @@ class GenerateUndirectedConnectedRandomGraphTest(unittest.TestCase):
     def test_determinate(self):
         generator = UndirectedConnectedRandomGraphGenerator(6, 15)
         g = generator()
-        self.assertEqual(Dijkstra(g, 0, 2).get_path(), 1186)
-        self.assertEqual(Dijkstra(g, 0).get_path(),
+        self.assertEqual(Dijkstra(g).pathfinder(0, 2), 1186)
+        self.assertEqual(Dijkstra(g).pathfinder(0),
                          [0, 654, 1186, 553, 288, 722])
 
 
@@ -279,13 +279,13 @@ class ComparisonTimeTest(unittest.TestCase):
         start_time = time.time()
         generator = BestForFordBellmanGraphGenerator(1000, 5000)
         g = generator()
-        FordBellman(g, 0).get_path()
+        FordBellman(g).pathfinder()
         best_time = time.time() - start_time
 
         start_time = time.time()
         generator = WorstForFordBellmanGraphGenerator(1000, 5000)
         g = generator()
-        FordBellman(g, 0).get_path()
+        FordBellman(g).pathfinder()
         worst_time = time.time() - start_time
 
         self.assertGreater(worst_time, best_time)
@@ -294,13 +294,13 @@ class ComparisonTimeTest(unittest.TestCase):
         start_time = time.time()
         generator = CompleteGraphGenerator(100, 4950)
         g = generator()
-        Levit(g, 0).get_path()
+        Levit(g).pathfinder()
         best_time = time.time() - start_time
 
         start_time = time.time()
         generator = WorstForLevitGenerator(100, 4950)
         g = generator()
-        Levit(g, 0).get_path()
+        Levit(g).pathfinder()
         worst_time = time.time() - start_time
 
         self.assertGreater(worst_time, best_time)
