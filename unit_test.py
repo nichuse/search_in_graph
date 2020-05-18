@@ -31,6 +31,10 @@ def init_graph():
     return g
 
 
+def init_generator(generator, count_vertex, count_edges, seed=0):
+    return generator(count_vertex, count_edges)(seed)
+
+
 class GraphTests(unittest.TestCase):
     def test_add_edge(self):
         g = Graph()
@@ -147,30 +151,26 @@ class LevitTest(unittest.TestCase):
 
 class GenerateRandomGraphTest(unittest.TestCase):
     def test_size_graph(self):
-        generator = RandomGraphGenerator(4, 4)
-        g = generator(2)
+        g = init_generator(RandomGraphGenerator, 4, 4, 2)
         self.assertEqual(g.count_edges(), 4)
         self.assertEqual(g.count_vertex(), 4)
         self.assertEqual(g.max_vertex(), 3)
 
     def test_determinate(self):
-        generator = RandomGraphGenerator(4, 4)
-        g = generator(2)
+        g = init_generator(RandomGraphGenerator, 4, 4, 2)
         self.assertEqual(Dijkstra(g).pathfinder(0, 2), 855)
         self.assertEqual(Dijkstra(g).pathfinder(0), [0, INF, 855, INF])
 
 
 class GenerateCompleteGraphTest(unittest.TestCase):
     def test_size_graph(self):
-        generator = CompleteGraphGenerator(4, 6)
-        g = generator(2)
+        g = init_generator(CompleteGraphGenerator, 4, 6, 2)
         self.assertEqual(g.count_edges(), 4 * 3)
         self.assertEqual(g.count_vertex(), 4)
         self.assertEqual(g.max_vertex(), 3)
 
     def test_determinate(self):
-        generator = CompleteGraphGenerator(4, 6)
-        g = generator(2)
+        g = init_generator(CompleteGraphGenerator, 4, 6, 2)
         self.assertEqual(Dijkstra(g).pathfinder(0, 2), 883)
         self.assertEqual(Dijkstra(g).pathfinder(0),
                          [0, 978, 883, 970])
@@ -178,15 +178,13 @@ class GenerateCompleteGraphTest(unittest.TestCase):
 
 class GenerateBestForFordBellmanGraphTest(unittest.TestCase):
     def test_size_graph(self):
-        generator = BestForFordBellmanGraphGenerator(4, 4)
-        g = generator(2)
+        g = init_generator(BestForFordBellmanGraphGenerator, 4, 4, 2)
         self.assertEqual(g.count_edges(), 4)
         self.assertEqual(g.count_vertex(), 4)
         self.assertEqual(g.max_vertex(), 3)
 
     def test_determinate(self):
-        generator = BestForFordBellmanGraphGenerator(6, 7)
-        g = generator(2)
+        g = init_generator(BestForFordBellmanGraphGenerator, 6, 7, 2)
         self.assertEqual(Dijkstra(g).pathfinder(0, 2), 883)
         self.assertEqual(Dijkstra(g).pathfinder(0),
                          [0, 978, 883, 970, 869, 57])
@@ -194,15 +192,13 @@ class GenerateBestForFordBellmanGraphTest(unittest.TestCase):
 
 class GenerateWorstForFordBellmanGraphTest(unittest.TestCase):
     def test_size_graph(self):
-        generator = WorstForFordBellmanGraphGenerator(5, 6)
-        g = generator(2)
+        g = init_generator(WorstForFordBellmanGraphGenerator, 5, 6, 2)
         self.assertEqual(g.count_edges(), 6)
         self.assertEqual(g.count_vertex(), 5)
         self.assertEqual(g.max_vertex(), 4)
 
     def test_determinate(self):
-        generator = WorstForFordBellmanGraphGenerator(6, 7)
-        g = generator(2)
+        g = init_generator(WorstForFordBellmanGraphGenerator, 6, 7, 2)
         self.assertEqual(Dijkstra(g).pathfinder(0, 2), 1861)
         self.assertEqual(Dijkstra(g).pathfinder(0),
                          [0, 978, 1861, 2831, 3700, 3757])
@@ -210,23 +206,20 @@ class GenerateWorstForFordBellmanGraphTest(unittest.TestCase):
 
 class GenerateWorstForLevitGraphTest(unittest.TestCase):
     def test_size_graph(self):
-        generator = WorstForLevitGenerator(5, 10)
-        g = generator()
+        g = init_generator(WorstForLevitGenerator, 5, 10)
         self.assertEqual(g.count_edges(), 20)
         self.assertEqual(g.count_vertex(), 5)
         self.assertEqual(g.max_vertex(), 4)
 
     def test_determinate(self):
-        generator = WorstForLevitGenerator(6, 15)
-        g = generator()
+        g = init_generator(WorstForLevitGenerator, 6, 15)
         self.assertEqual(Dijkstra(g).pathfinder(0, 2), 0)
         self.assertEqual(Dijkstra(g).pathfinder(0), [0, 0, 0, 0, 0, 0])
 
 
 class GenerateUndirectedConnectedRandomGraphTest(unittest.TestCase):
     def test_size_graph(self):
-        generator = UndirectedConnectedRandomGraphGenerator(5, 10)
-        g = generator()
+        g = init_generator(UndirectedConnectedRandomGraphGenerator, 5, 10)
         self.assertEqual(g.count_edges(), 10)
         self.assertEqual(g.count_vertex(), 5)
         self.assertEqual(g.max_vertex(), 4)
