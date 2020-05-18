@@ -1,4 +1,11 @@
-from generators import *
+from generators import (
+    RandomGraphGenerator,
+    CompleteGraphGenerator,
+    WorstForLevitGenerator,
+    BestForFordBellmanGraphGenerator,
+    WorstForFordBellmanGraphGenerator,
+    UndirectedConnectedRandomGraphGenerator
+)
 import argparse
 
 GENERATORS = {
@@ -6,7 +13,7 @@ GENERATORS = {
     'complete': CompleteGraphGenerator,
     'best for ford-bellman': BestForFordBellmanGraphGenerator,
     'worst for ford-bellman': WorstForFordBellmanGraphGenerator,
-    'worst for levit': WorstForFordBellmanGraphGenerator,
+    'worst for levit': WorstForLevitGenerator,
     'connected random graph': UndirectedConnectedRandomGraphGenerator
 }
 
