@@ -9,7 +9,7 @@ import time
 import argparse
 
 
-GENERATORS = {
+ALGORITHMS = {
     'levit': Levit,
     'dijkstra': Dijkstra,
     'ford-bellman': FordBellman,
@@ -18,21 +18,22 @@ GENERATORS = {
 
 
 def timer(algorithm, number_of_starts, start=0, end=None):
-
-    start_time = time.time()
+    t = []
     for _ in range(number_of_starts):
+        start_time = time.time()
         algorithm.pathfinder(start, end)
-    end_time = time.time()
+        end_time = time.time()
+        t.append(end_time - start_time)
 
-    return end_time - start_time
+    return t
 
 
 def initiate_graph(filename):
-    graph = Graph()
-    with open(filename, 'r') as g:
-        graph.read(g)
+    g = Graph()
+    with open(filename, 'r') as file:
+        g.read(file)
 
-    return graph
+    return g
 
 
 def parseargs():
@@ -43,11 +44,11 @@ def parseargs():
     parser.add_argument('-s', action='store', dest='start',
                         type=int, default=0)
     parser.add_argument('-n', action='store', dest='number_of_starts',
-                        type=int, default=100)
-    parser.add_argument('-an', action='store', dest='algorithm', type=str,
+                        type=int, default=101)
+    parser.add_argument('-a', '--algorithm-name', action='store', dest='algorithm', type=str,
                         choices=['dijkstra', 'ford-bellman', 'levit', 'other'])
-    parser.add_argument('-fn', action='store', dest='filename',
-                        type=str, default='stdout')
+    parser.add_argument('-f', '--file-name', action='store', dest='filename',
+                        type=str)
 
     return parser.parse_args()
 
@@ -55,4 +56,6 @@ def parseargs():
 if __name__ == '__main__':
     args = parseargs()
     graph = initiate_graph(args.filename)
-    time = timer(args.algorithm, args.number_of_starts, args.start, args.end)
+    time = timer(ALGORITHMS[args.algorithm](graph), args.number_of_starts, args.start, args.end)
+    with open('results.txt', 'a') as r:
+        r.write(f"{args.algorithm} {sum(time)} {args.number_of_starts} {' '.join(map(str, time))} \n")

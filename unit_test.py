@@ -15,6 +15,7 @@ from algorithms import (
     INF
 )
 
+from time_manager import timer
 from graph import Graph
 import time
 import unittest
@@ -267,36 +268,27 @@ class MinimalPathBetweenSpecifiedVertexesTest(unittest.TestCase):
                          [[2, 1, 1], [1, 2, 1], [INF, INF, INF]])
 
 
-class ComparisonTimeTest(unittest.TestCase):
+class TimeManagerTest(unittest.TestCase):
     def test_generate_best_and_worst_ford_bellman(self):
-        start_time = time.time()
         generator = BestForFordBellmanGraphGenerator(1000, 5000)
         g = generator()
-        FordBellman(g).pathfinder()
-        best_time = time.time() - start_time
+        t1 = timer(FordBellman(g), 1)
 
-        start_time = time.time()
         generator = WorstForFordBellmanGraphGenerator(1000, 5000)
         g = generator()
-        FordBellman(g).pathfinder()
-        worst_time = time.time() - start_time
-
-        self.assertGreater(worst_time, best_time)
+        t2 = timer(FordBellman(g), 1)
+        self.assertGreater(-sum(t1), -sum(t2))
 
     def test_generate_worst_and_random_levit(self):
-        start_time = time.time()
         generator = CompleteGraphGenerator(100, 4950)
         g = generator()
-        Levit(g).pathfinder()
-        best_time = time.time() - start_time
+        t1 = timer(Levit(g), 3)
 
-        start_time = time.time()
         generator = WorstForLevitGenerator(100, 4950)
         g = generator()
-        Levit(g).pathfinder()
-        worst_time = time.time() - start_time
+        t2 = timer(Levit(g), 3)
 
-        self.assertGreater(worst_time, best_time)
+        self.assertGreater(sum(t2), sum(t1))
 
 
 if __name__ == '__main__':
