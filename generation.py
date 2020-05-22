@@ -7,7 +7,7 @@ from generators import (
     UndirectedConnectedRandomGraphGenerator
 )
 import argparse
-
+import os
 
 GENERATORS = {
     'random': RandomGraphGenerator,
@@ -35,7 +35,7 @@ def parseargs():
                         type=int)
     parser.add_argument('-v', action='store', dest='count_vertex',
                         type=int)
-    parser.add_argument('-gn', action='store', dest='name_generator',
+    parser.add_argument('-g', action='store', dest='name_generator',
                         choices=['random',
                                  'complete',
                                  'best for ford-bellman',
@@ -44,7 +44,7 @@ def parseargs():
                                  'connected random graph'
                                  ],
                         type=str, default='random')
-    parser.add_argument('-fn', action='store', dest='filename',
+    parser.add_argument('-f', action='store', dest='filename',
                         type=str, default='stdout',
                         help='file name where to save generated graph')
     parser.add_argument('-s', action='store', dest='seed',
@@ -60,6 +60,7 @@ def generate(arguments):
     if arguments.filename == 'stdout':
         print(str(graph))
     else:
+        os.chdir(os.getcwd() + '/generated_graphs')
         with open(arguments.filename, 'w') as file:
             graph.save(file)
 

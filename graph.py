@@ -17,10 +17,7 @@ class Graph:
         self.edge_list = []
 
     def __str__(self):
-        s = str()
-        for edge in self.edge_list:
-            s += str(edge) + '\n'
-        return s
+        return '\n'.join(map(str, self.edge_list))
 
     def read(self, file):
         for edge in file:

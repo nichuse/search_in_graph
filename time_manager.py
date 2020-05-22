@@ -6,6 +6,7 @@ from algorithms import (
 )
 from graph import Graph
 import time
+import os
 import argparse
 
 
@@ -30,6 +31,7 @@ def timer(algorithm, number_of_starts, start=0, end=None):
 
 def initiate_graph(filename):
     g = Graph()
+    os.chdir(os.getcwd() + '/generated_graphs')
     with open(filename, 'r') as file:
         g.read(file)
 
@@ -47,7 +49,9 @@ def parseargs():
                         type=int, default=101)
     parser.add_argument('-a', '--algorithm-name', action='store', dest='algorithm', type=str,
                         choices=['dijkstra', 'ford-bellman', 'levit', 'other'])
-    parser.add_argument('-f', '--file-name', action='store', dest='filename',
+    parser.add_argument('-r', '--file_read', action='store', dest='filename_for_read',
+                        type=str)
+    parser.add_argument('-w', '--file_write', action='store', dest='filename_for_write',
                         type=str)
 
     return parser.parse_args()
@@ -55,7 +59,8 @@ def parseargs():
 
 if __name__ == '__main__':
     args = parseargs()
-    graph = initiate_graph(args.filename)
+    graph = initiate_graph(args.filename_for_read)
     time = timer(ALGORITHMS[args.algorithm](graph), args.number_of_starts, args.start, args.end)
-    with open('results.txt', 'a') as r:
+    os.chdir(os.getcwd()[::-1][os.getcwd()[::-1].find('/'):][::-1] + '/results')
+    with open(args.filename_for_write, 'a') as r:
         r.write(f"{args.algorithm} {sum(time)} {args.number_of_starts} {' '.join(map(str, time))} \n")

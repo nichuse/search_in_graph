@@ -160,7 +160,7 @@ class UndirectedConnectedRandomGraphGenerator(Generator):
                 f = random.choice(used_vertexes)
                 if f != s and (s, f) not in used_edge.keys():
                     break
-            if (s, f) not in used_edge.keys():
+            if f != s and (s, f) not in used_edge.keys():
                 weight = random.randint(MIN_EDGE_COST, MAX_EDGE_COST)
                 g.add_edge(s, f, weight)
                 g.add_edge(f, s, weight)
