@@ -66,11 +66,17 @@ class WorstForFordBellmanGraphGenerator(Generator):
         count_edges = self.count_edges
         random.seed(seed)
         for v in range(self.count_vertex - 1):
+            w = random.randint(MIN_EDGE_COST, MAX_EDGE_COST)
             graph.add_edge(
                 v,
                 v + 1,
-                random.randint(MIN_EDGE_COST, MAX_EDGE_COST)
+                w
             )
+            # graph.add_edge(
+            #     v + 1,
+            #     v,
+            #     w
+            # )
             count_edges -= 1
             if count_edges == 0:
                 return graph
@@ -80,11 +86,17 @@ class WorstForFordBellmanGraphGenerator(Generator):
         while count_edges:
             for vertex in range(current_vertex, 0, -1):
                 count_edges -= 1
+                w = random.randint(MIN_EDGE_COST, MAX_EDGE_COST)
                 graph.add_edge(
                     current_vertex,
                     vertex,
-                    random.randint(MIN_EDGE_COST, MAX_EDGE_COST)
+                    w
                 )
+                # graph.add_edge(
+                #     vertex,
+                #     current_vertex,
+                #     w
+                # )
 
                 if not count_edges:
                     break
@@ -176,12 +188,15 @@ class RandomListVertexesGenerator:
         self.count_vertexes = count_vertexes
         self.max_value = max_value
 
+    def __call__(self, seed=0):
+        return self.generate(seed)
+
     def generate(self, seed):
         random.seed(seed)
         vertexes = []
         used = [False for _ in range(self.max_value)]
         while len(vertexes) < self.count_vertexes:
-            v = random.randint(0, self.max_value)
+            v = random.randint(0, self.max_value - 1)
             if not used[v]:
                 vertexes.append(v)
                 used[v] = True

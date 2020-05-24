@@ -81,7 +81,7 @@ class GraphTests(unittest.TestCase):
         g = Graph()
         with open('test_graph.txt', 'r') as graph:
             g.read(graph)
-        self.assertEqual('0 1 1\n0 2 2\n', str(g))
+        self.assertEqual('0 1 1\n0 2 2', str(g))
 
 
 class DijkstraTest(unittest.TestCase):

@@ -123,7 +123,7 @@ class MinimalPathBetweenSpecifiedVertexes:
                         )
         return distances
 
-    def prim_algorithm(self):
+    def pathfinder(self):
         graph = self.get_graph_from_specified_vertexes()
         size = len(self.specified_vertexes)
         used = [False for _ in range(size)]
