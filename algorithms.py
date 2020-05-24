@@ -143,7 +143,7 @@ class MinimalPathBetweenSpecifiedVertexes:
         return min_edges_weight
 
     def get_min_path(self):
-        return sum(self.prim_algorithm())
+        return sum(self.pathfinder())
 
     def get_graph_from_specified_vertexes(self):
         distances = self.floyd_algorithm()
