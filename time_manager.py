@@ -71,7 +71,7 @@ if __name__ == '__main__':
         t = timer(ALGORITHMS[args.algorithm](graph), args.number_of_starts)
     os.chdir(os.getcwd()[::-1][os.getcwd()[::-1].find('/'):][::-1] +
              '/results')
-    print(graph.count_vertex(), args.algorithm, time.time())
+
     with open(args.filename_for_write, 'a') as r:
         r.write(f"{args.algorithm} {sum(t)} {args.number_of_starts}"
                 f" {' '.join(map(str, t))} \n")
