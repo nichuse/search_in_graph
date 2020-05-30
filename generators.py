@@ -43,6 +43,7 @@ class BestForFordBellmanGraphGenerator(Generator):
         graph = Graph()
         count_edges = self.count_edges
         current_vertex = 0
+        cost = 0
         random.seed(seed)
         while count_edges:
             for vertex in range(current_vertex + 1, self.count_vertex):
@@ -50,12 +51,13 @@ class BestForFordBellmanGraphGenerator(Generator):
                 graph.add_edge(
                     current_vertex,
                     vertex,
-                    random.randint(MIN_EDGE_COST, MAX_EDGE_COST)
+                    cost
                 )
 
                 if not count_edges:
                     break
             current_vertex += 1
+            cost += 1
 
         return graph
 
@@ -72,11 +74,6 @@ class WorstForFordBellmanGraphGenerator(Generator):
                 v + 1,
                 w
             )
-            # graph.add_edge(
-            #     v + 1,
-            #     v,
-            #     w
-            # )
             count_edges -= 1
             if count_edges == 0:
                 return graph
@@ -92,11 +89,6 @@ class WorstForFordBellmanGraphGenerator(Generator):
                     vertex,
                     w
                 )
-                # graph.add_edge(
-                #     vertex,
-                #     current_vertex,
-                #     w
-                # )
 
                 if not count_edges:
                     break

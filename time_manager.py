@@ -20,16 +20,19 @@ ALGORITHMS = {
     'other': MinimalPathBetweenSpecifiedVertexes,
 }
 
+N = [6, 11, 16, 21, 26, 31, 36, 41, 51, 101]
+
 
 def timer(algorithm):
     t = []
-    for _ in range(101):
+    count = 0
+    for i in range(101):
+        count = i + 1
         tm = timeit.timeit(algorithm.pathfinder, number=1)
         t.append(tm)
-        if len(t) > 3 and get_inaccuracy(t) / (sum(t) / len(t)) <= 0.05:
+        if (i + 1) in N and get_inaccuracy(t) / (sum(t) / len(t)) <= 0.05:
             break
-    #print(get_inaccuracy(t) / sum(t) / len(t))
-    return sum(t) / len(t), get_inaccuracy(t)
+    return sum(t) / len(t), get_inaccuracy(t), count
 
 
 def get_inaccuracy(t):
@@ -73,13 +76,13 @@ if __name__ == '__main__':
     graph = initiate_graph(args.filename_for_read, args.path)
     if args.algorithm == 'other':
         vertexes = RandomListVertexesGenerator(graph.max_vertex(), 10)()
-        time, inaccuracy = timer(ALGORITHMS[args.algorithm](
+        time, inaccuracy, count = timer(ALGORITHMS[args.algorithm](
             graph,
             vertexes
         ))
     else:
-        time, inaccuracy = timer(ALGORITHMS[args.algorithm](graph))
+        time, inaccuracy, count = timer(ALGORITHMS[args.algorithm](graph))
     os.chdir(os.path.join(args.path, 'results'))
     with open(args.filename_for_write, 'a') as r:
-        r.write(f"{args.algorithm} {time}"
-                f" {inaccuracy} \n")
+        r.write(f"{args.algorithm} {graph.count_vertex()} {graph.count_edges()} {time}"
+                f" {inaccuracy} {count}\n")

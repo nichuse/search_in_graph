@@ -186,9 +186,9 @@ class GenerateBestForFordBellmanGraphTest(unittest.TestCase):
 
     def test_determinate(self):
         g = init_generator(BestForFordBellmanGraphGenerator, 6, 7, 2)
-        self.assertEqual(Dijkstra(g).pathfinder(0, 2), 883)
+        self.assertEqual(Dijkstra(g).pathfinder(0, 2), 0)
         self.assertEqual(Dijkstra(g).pathfinder(0),
-                         [0, 978, 883, 970, 869, 57])
+                         [0, 0, 0, 0, 0, 0])
 
 
 class GenerateWorstForFordBellmanGraphTest(unittest.TestCase):
@@ -272,23 +272,23 @@ class TimeManagerTest(unittest.TestCase):
     def test_generate_best_and_worst_ford_bellman(self):
         generator = BestForFordBellmanGraphGenerator(1000, 5000)
         g = generator()
-        t1 = timer(FordBellman(g), 1)
+        t1, a, b = timer(FordBellman(g))
 
         generator = WorstForFordBellmanGraphGenerator(1000, 5000)
         g = generator()
-        t2 = timer(FordBellman(g), 1)
-        self.assertGreater(-sum(t1), -sum(t2))
+        t2, a, b = timer(FordBellman(g))
+        self.assertGreater(t1, -t2)
 
     def test_generate_worst_and_random_levit(self):
         generator = CompleteGraphGenerator(100, 4950)
         g = generator()
-        t1 = timer(Levit(g), 3)
+        t1, a, b = timer(Levit(g))
 
         generator = WorstForLevitGenerator(100, 4950)
         g = generator()
-        t2 = timer(Levit(g), 3)
+        t2, a, b = timer(Levit(g))
 
-        self.assertGreater(sum(t2), sum(t1))
+        self.assertGreater(t2, t1)
 
 
 if __name__ == '__main__':

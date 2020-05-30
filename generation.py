@@ -65,7 +65,7 @@ def generate(arguments):
         if arguments.filename == 'stdout':
             print(*lst)
         else:
-            os.chdir(os.getcwd() + '/generated_graphs')
+            os.chdir(os.path.join(os.getcwd(), 'generated_graphs'))
             with open(arguments.filename, 'w') as file:
                 file.write('\n'.join(map(str, lst)))
     else:
@@ -73,7 +73,7 @@ def generate(arguments):
         if arguments.filename == 'stdout':
             print(str(graph))
         else:
-            os.chdir(os.getcwd() + '/generated_graphs')
+            os.chdir(os.path.join(os.getcwd(), 'generated_graphs'))
             with open(arguments.filename, 'w') as file:
                 graph.save(file)
 
