@@ -110,6 +110,7 @@ class MinimalPathBetweenSpecifiedVertexes:
 
     def floyd_algorithm(self):
         size = self.graph.max_vertex()
+        print(self.graph.max_vertex())
         distances = [[INF for _ in range(size + 1)] for _ in range(size + 1)]
         for edge in self.graph.edge_list:
             distances[edge.s][edge.f] = edge.weight
