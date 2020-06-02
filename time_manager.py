@@ -84,5 +84,6 @@ if __name__ == '__main__':
         time, inaccuracy, count = timer(ALGORITHMS[args.algorithm](graph))
     os.chdir(os.path.join(args.path, 'results'))
     with open(args.filename_for_write, 'a') as r:
-        r.write(f"{args.algorithm} {graph.count_vertex()} {graph.count_edges()} {time}"
+        r.write(f"{args.algorithm} {graph.count_vertex()}"
+                f" {graph.count_edges()} {time}"
                 f" {inaccuracy} {count}\n")
